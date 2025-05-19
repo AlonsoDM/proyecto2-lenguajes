@@ -20,7 +20,22 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/githubuser/proyecto2-lenguajes#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+  - base >= 4.7 && < 5
+  - cryptonite
+  - directory
+  - bytestring
+  - text
+  - optparse-applicative
+  - Clipboard
+  - process
+  - temporary
+  - aeson
+  - filepath
+  - time
+  - random
+  - uuid
+  - base64-bytestring
+  - memory
 
 ghc-options:
 - -Wall
