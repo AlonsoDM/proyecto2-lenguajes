@@ -38,21 +38,21 @@ generateSalt = getRandomBytes 16
 generateMasterKey :: IO BS.ByteString                                                                         -- Generate a random master key for encrypting passwords
 generateMasterKey = getRandomBytes 32                                                                         -- 256 bits for AES256
 
-hashPin :: T.Text -> BS.ByteString -> BS.ByteString                                                           -- Hash a PIN with a salt using PBKDF2
+hashPin :: T.Text -> BS.ByteString -> BS.ByteString                                                           -- Hash a PIN with a salt using PBKDF2-HMAC-SHA256, 10,000 iterations, 32-byte output
 -- hashPin pin salt = PBKDF2.generate
-  -- (PBKDF2.prfHMAC Hash.SHA256)                                                                                -- Use HMAC with SHA256
-  -- { PBKDF2.iterCounts = 10000                                                                                 -- Number of iterations
-  -- , PBKDF2.outputLength = 32                                                                                  -- Output length in bytes (256 bits)
+  -- (PBKDF2.prfHMAC Hash.SHA256)                                                                                
+  -- { PBKDF2.iterCounts = 10000                                                                                 
+  -- , PBKDF2.outputLength = 32                                                                                  
   -- }
-  -- (TE.encodeUtf8 pin)                                                                                         -- PIN as input
-  -- salt                                                                                                        -- Salt
+  -- (TE.encodeUtf8 pin)                                                                                         
+  -- salt                                                                                                       
 hashPin pin salt = PBKDF2.generate
-  (PBKDF2.prfHMAC Hash.SHA256)
+(PBKDF2.prfHMAC Hash.SHA256)                                                                                  -- Use HMAC with SHA256
   (PBKDF2.Parameters
-     { PBKDF2.iterCounts = 10000
-     , PBKDF2.outputLength = 32
+     { PBKDF2.iterCounts = 10000                                                                              -- Number of iterations
+  , PBKDF2.outputLength = 32                                                                                  -- Output length in bytes (256 bits)
      })
-  (TE.encodeUtf8 pin)
+  (TE.encodeUtf8 pin)                                                                                         -- PIN as input
   salt
   
 verifyPin :: T.Text -> BS.ByteString -> BS.ByteString -> Bool                                                 -- Verify if a PIN matches the stored hash
