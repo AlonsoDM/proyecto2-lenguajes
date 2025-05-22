@@ -47,7 +47,7 @@ hashPin :: T.Text -> BS.ByteString -> BS.ByteString                             
   -- (TE.encodeUtf8 pin)                                                                                         
   -- salt                                                                                                       
 hashPin pin salt = PBKDF2.generate
-(PBKDF2.prfHMAC Hash.SHA256)                                                                                  -- Use HMAC with SHA256
+  (PBKDF2.prfHMAC Hash.SHA256)                                                                                  -- Use HMAC with SHA256
   (PBKDF2.Parameters
      { PBKDF2.iterCounts = 10000                                                                              -- Number of iterations
   , PBKDF2.outputLength = 32                                                                                  -- Output length in bytes (256 bits)
