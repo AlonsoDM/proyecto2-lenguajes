@@ -12,9 +12,7 @@ A secure password manager implemented in Haskell that uses AES-256 encryption to
 ### Features
 - User registration and authentication with PIN
 - AES-256 encryption for all stored passwords
-- Generate secure random passwords
 - Copy passwords to clipboard
-- Store service URLs and notes
 - Console-based user interface
 
 ### Project Structure

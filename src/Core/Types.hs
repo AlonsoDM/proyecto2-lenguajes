@@ -34,8 +34,8 @@ data PasswordEntry = PasswordEntry                          -- Password entry da
 
 
 
-instance ToJSON PasswordEntry
-instance FromJSON PasswordEntry
+instance ToJSON PasswordEntry                               -- JSON serialization instance for PasswordEntry
+instance FromJSON PasswordEntry                             -- JSON deserialization instance for PasswordEntry
 
 data Vault = Vault                                          -- Vault containing all password entries for a user
   { owner :: T.Text                                         -- Username of the vault owner
@@ -44,12 +44,12 @@ data Vault = Vault                                          -- Vault containing 
 
 
 
-instance ToJSON Vault
+instance ToJSON Vault                                       -- JSON serialization/deserialization instances for Vault
 instance FromJSON Vault
 
-data Result a                                               -- Application result type
-  = Success a
-  | Error T.Text
+data Result a                                               -- A generic result type for application operations
+  = Success a                                               -- Successful result containing a value of type 'a'
+  | Error T.Text                                            
   deriving (Show, Eq, Functor)
 
 data Session = Session                                      -- Session data for authenticated user

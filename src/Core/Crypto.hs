@@ -32,13 +32,13 @@ import qualified Data.ByteString.Base64 as B64
 -------------------------------
 
 
-generateSalt :: IO BS.ByteString                                                                              -- Generate a random salt
+generateSalt :: IO BS.ByteString                                                                              -- Generate a 16 byte random salt for PIN hashing
 generateSalt = getRandomBytes 16
 
 generateMasterKey :: IO BS.ByteString                                                                         -- Generate a random master key for encrypting passwords
 generateMasterKey = getRandomBytes 32                                                                         -- 256 bits for AES256
 
-hashPin :: T.Text -> BS.ByteString -> BS.ByteString                                                           -- Hash a PIN with a salt using PBKDF2-HMAC-SHA256, 10,000 iterations, 32-byte output
+hashPin :: T.Text -> BS.ByteString -> BS.ByteString                                                           -- Hashes a PIN with a salt using PBKDF2-HMAC-SHA256, 10000 iterations, 32-byte output
 -- hashPin pin salt = PBKDF2.generate
   -- (PBKDF2.prfHMAC Hash.SHA256)                                                                                
   -- { PBKDF2.iterCounts = 10000                                                                                 
@@ -47,7 +47,7 @@ hashPin :: T.Text -> BS.ByteString -> BS.ByteString                             
   -- (TE.encodeUtf8 pin)                                                                                         
   -- salt                                                                                                       
 hashPin pin salt = PBKDF2.generate
-  (PBKDF2.prfHMAC Hash.SHA256)                                                                                  -- Use HMAC with SHA256
+  (PBKDF2.prfHMAC Hash.SHA256)                                                                                -- Use HMAC with SHA256
   (PBKDF2.Parameters
      { PBKDF2.iterCounts = 10000                                                                              -- Number of iterations
   , PBKDF2.outputLength = 32                                                                                  -- Output length in bytes (256 bits)
@@ -59,7 +59,7 @@ verifyPin :: T.Text -> BS.ByteString -> BS.ByteString -> Bool                   
 verifyPin pin salt storedHash = hashPin pin salt == storedHash
 
 deriveKeyFromPin :: T.Text -> BS.ByteString -> BS.ByteString                                                  -- Derive an encryption key from the PIN and salt
-deriveKeyFromPin = hashPin                                                                                    -- We're using the same PBKDF2 process
+deriveKeyFromPin = hashPin                                                                                    -- Uses the same PBKDF2 process
 
 encryptMasterKey :: BS.ByteString -> BS.ByteString -> IO BS.ByteString                                        -- Encrypt the master key with a key derived from the PIN
 encryptMasterKey derivedKey masterKey = do
